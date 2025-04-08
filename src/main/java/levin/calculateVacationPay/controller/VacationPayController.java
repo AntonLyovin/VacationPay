@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,7 +41,7 @@ public class VacationPayController {
         return vacationPayService.calculateVacationPay(averageSalary, vacationDays);
     }
 
-    @GetMapping("/calculateByDays/{averageSalary}/{vacationDays}")
+    @GetMapping("/calculateByDays/{averageSalary}/{dateFrom}/{dateTo}")
     @Validated
     @Operation(
             summary = "Расчет отпускных",
@@ -53,30 +51,14 @@ public class VacationPayController {
                                        @Parameter(description = "Средняя зарплата")
                                        @Min(1)
                                        double averageSalary,
-                                       @PathVariable("vacationDays")
-                                       @Parameter(description = "Дни отпуска")
-                                       List<Date> vacationDays
-    ) {
-        return vacationPayService.calculateVacationPayAdvance(averageSalary, vacationDays);
-    }
-    @GetMapping("/calculateByDays/dateFrom/{averageSalary}/{dateFrom}/{dateTo}")
-    @Validated
-    @Operation(
-            summary = "Расчет отпускных",
-            description = "Позволяет рассчитать количество отпускных"
-    )
-    public Double calculateVacationPay(@PathVariable("averageSalary")
-                                       @Parameter(description = "Средняя зарплата")
-                                       @Min(1)
-                                       double averageSalary,
-                                       @RequestParam("dateFrom")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                       @RequestParam("dateFrom") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                        @Parameter(description = "Дата начала отпуска в формате: YYYY-MM-DD")
                                        LocalDate dateFrom,
-                                       @RequestParam("dateTo")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                           @Parameter(description = "Дата окончания отпуска в формате: YYYY-MM-DD")
-                                           LocalDate dateTo
+                                       @RequestParam("dateTo") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                       @Parameter(description = "Дата окончания отпуска в формате: YYYY-MM-DD")
+                                       LocalDate dateTo
 
     ) {
-        return vacationPayService.calculateVacationPayAdvanceDateAt(averageSalary, dateFrom,dateTo);
+        return vacationPayService.calculateVacationPayAdvanceDateAt(averageSalary, dateFrom, dateTo);
     }
 }
